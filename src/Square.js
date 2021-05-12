@@ -1,53 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
 
-class Square extends React.Component {
+export default class Square extends React.Component {
     constructor(props) {
         super(props);
+        const cell = props.value;
         this.state = {
             editing: false,
-            value: props.value,
+            display: cell.display(),
+            edit: cell.edit(),
             selected: false
         }
+        cell.setUpdateCallBack(() => {
+            this.setState({
+                display: cell.display(),
+                edit: cell.edit(),
+            });
+            console.log(`Cell (${props.y}, ${props.x}) updated`);
+        });
     }
 
-
-    render(){
+    render() {
         if (this.state.editing) {
             return(
                 <input
-                    style={css}
+                    className="cell"
                     type="text"
                     onBlur={this.onBlur}
                     onKeyPress={this.onKeyPressOnInput}
-                    value={this.state.value}
+                    value={this.state.edit}
                     onChange={this.onChange}
                     autoFocus
                 />
             );
         } else {
             return(
-                <button onClick={() => this.clicked()}>{this.state.value}</button>
+                <button className="cell" onClick={() => this.clicked()}>{this.state.display}</button>
             );
         }
 
     }
 
-    componentDidMount() {
-        window.document.addEventListener('unselectAll',
-            this.handleUnselectAll);
-    }
-
-
-
-    componentWillUnmount() {
-        window.document.removeEventListener('unselectAll',
-            this.handleUnselectAll);
-    }
-
     onChange = (e) => {
-        this.setState({ value: e.target.value });
+        this.setState({ edit: e.target.value });
     }
 
     onKeyPressOnInput = (e) => {
@@ -61,29 +55,16 @@ class Square extends React.Component {
         this.hasNewValue(e.target.value)
     }
 
-    handleUnselectAll = () => {
-        if (this.state.selected || this.state.editing) {
-            this.setState({ selected: false, editing: false })
-        }
-    }
-
-    hasNewValue = (value) => {
-        this.props.onChangedValue(
-            value,
-        )
-        this.setState({ editing: false })
-    }
-
-    emitUnselectAllEvent = () => {
-        const unselectAllEvent = new Event('unselectAll')
-        window.document.dispatchEvent(unselectAllEvent)
+    hasNewValue = (newVal) => {
+        console.log(`new value: ${newVal}`)
+        const cell = this.props.value;
+        cell.input(newVal);
+        this.setState({ editing: false, display: cell.display() })
     }
 
     clicked = () => {
-        this.emitUnselectAllEvent()
         this.setState({selected: true, editing: true})
     }
-
 
 
 }

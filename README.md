@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Building an Interactive Spreadsheet
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Today, the vast majority of businesses implement their commission plan models
+in Microsoft Excel, Google Sheets, or some other spreadsheet software. In this
+problem, you will implement a simplified browser-based spreadsheet that can be
+used to implement an extremely simple financial model.
 
-## Available Scripts
+In doing this exercise, please focus on the specific requirements below and 
+less on the infrastructure or architecture of the application. Additionally, 
+try to limit yourself to 4 hours.
 
-In the project directory, you can run:
+Please include explicit instructions on how to run your project locally.
 
-### `yarn start`
+Note that if we decide to move forward, the results of this exercise will be 
+used as part of the onsite interviewing process. You will be expected to run, 
+debug and enhance your code in a shared-screen setting, so
+keep that in mind when choosing the technologies to work with.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Requirements
 
-### `yarn test`
+* For simplicity, the size of the spreadsheet is fixed to 10 rows and 10
+  columns.
+  	- Columns are named after capital letters, starting with "A".
+	- Rows are numbered and increasing, starting from "1".
+* The state of the spreadsheet should be maintained in a backend service that
+  is mutatable via API calls.
+* The frontend should be interactive: saving data after a cell in the
+  spreadsheet changes, and updating any affected cells with their newly
+  computed values.
+* The state of the spreadsheet should be persisted across server restarts.
+* Cell values should support either an integer or a simple formula that
+  references other cells and only needs to support addition.
+    - For example, `-1` and `123` should be able to be stored in a cell.
+    - `=A1+B1` should be able to be stored in a cell, and the display value
+      should be the result of evaluating the sum of the value in `A1` and
+      the value in `B1`.
+* When calculating the results of a formula, please do not use a library. 
+  We are interested in seeing how you calculate these formulas.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Out-of-scope
 
-### `yarn build`
+* Don't worry about handling multiple concurrent users viewing and editing the
+  spreadsheet at the same time.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Background
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The sample code distributed with this package is provided to you as a starting
+point if you'd like to use it.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Setup
 
-### `yarn eject`
+1. Set up your virtualenv: `virtualenv -p python3 interview_venv`
+2. Source the `activate` script: `source interview_venv/bin/activate`
+3. Install the dependencies in your virtualenv:
+   `pip install -r requirements.txt`
+4. Run the server `FLASK_DEBUG=1 FLASK_APP=server.py flask run`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Solution
+The solution is separated into a React frontend and a Flask backend.
+I used `create-react-app` to bootstrap the frontend, and was not able to host the app on my Flask server.
+So I used the Flask server as an API server instead.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Running it locally
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. cd into the `server` directory and follow the setup to spin up the API server
+2. in a separate terminal, start the React app by `yarn start`
+3. the spreadsheet should load in browser, with some saved data
